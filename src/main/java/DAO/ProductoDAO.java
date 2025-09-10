@@ -3,6 +3,7 @@ package DAO;
 import domain.Producto;
 import domain.ProductoDTO;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,27 @@ public class ProductoDAO {
 
 
     public boolean agregarProducto(ProductoDTO productoDTO) {
+
+        if (productoDTO.getNombre().matches("\"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\\\\s\\\\.\\\\,\\\\(\\\\)\\\\&\\\\#\\\\@\\\\%\\\\!\\\\?]+$")){
+            System.out.println("caracte invalido");
+            return false;
+        }
+        BigDecimal precio = productoDTO.getPrecio();
+        if (precio.doubleValue()<=0){
+            System.out.println("precio invalido");
+            return false;
+        }
+        if (productoDTO.getStock()<=4){
+            System.out.println("stock invalido");
+            return false;
+        }
         Producto nuevoProducto = Producto.builder()
                 .nombre(productoDTO.getNombre())
                 .precio(productoDTO.getPrecio())
                 .stock(productoDTO.getStock())
                 .build();
         try (PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO producto(nombre, precio, stock) VALUES (?,?,?)")) {
+                "INSERT INTO producto1(nombre, precio, stock) VALUES (?,?,?)")) {
             ps.setString(1, nuevoProducto.getNombre());
             ps.setBigDecimal(2, nuevoProducto.getPrecio());
             ps.setInt(3, nuevoProducto.getStock());
@@ -69,7 +84,7 @@ public class ProductoDAO {
     }
 
     public List<ProductoDTO> mostrarProductos() {
-        try (PreparedStatement ps = con.prepareStatement("SELECT * from producto")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * from producto1")) {
             List<ProductoDTO> productos = new ArrayList<>();
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

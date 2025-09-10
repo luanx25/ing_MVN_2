@@ -4,6 +4,7 @@ import Servicio.ProductoServicio;
 import domain.ProductoDTO;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class SistemaInventario {
@@ -12,6 +13,7 @@ public class SistemaInventario {
     public static void main(String[] args) {
         int opcion = 0;
         Scanner sc = new Scanner(System.in);
+        sc.useLocale(Locale.US); // Configura locale para punto decimal
 
 
         System.out.println("Bienvenido al sistema de inventario");
@@ -159,7 +161,7 @@ public class SistemaInventario {
 
     public static void agregarProducto(String nombre, BigDecimal precio, Integer stock) {
         double v = precio.doubleValue();
-        if (nombre == null || nombre.equals("") || v <= 0 || stock <= 4) {
+        if (nombre == null || nombre.equals("") || v <= 0 || stock >= 4) {
             System.out.println("Datos invalidos");
         } else {
             ps.agregarProducto(ProductoDTO.builder()

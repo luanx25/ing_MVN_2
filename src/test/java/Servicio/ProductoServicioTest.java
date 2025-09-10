@@ -16,8 +16,8 @@ public class ProductoServicioTest {
         ProductoDAO dao = new ProductoDAO();
         ProductoDTO p = ProductoDTO.builder()
                 .nombre("cafe")
-                .precio(new BigDecimal("19.00"))
-                .stock(12)
+                .precio(new BigDecimal("19.50"))
+                .stock(10)
                 .build();
 //       assertDoesNotThrow(()->dao.agregarProducto(p));
         assertTrue(dao.agregarProducto(p));
