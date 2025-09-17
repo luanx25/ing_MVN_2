@@ -18,7 +18,7 @@ public class SistemaInventario {
 
         System.out.println("Bienvenido al sistema de inventario");
         System.out.println("Iniciando el programa");
-        for (int i = 0; i <10 ; i++) {
+        for (int i = 0; i < 10; i++) {
             try {
                 Thread.sleep(500);
                 System.out.print(".");
@@ -30,15 +30,15 @@ public class SistemaInventario {
         System.out.println();
 
 
-
-        while (opcion != 6) {
+        while (opcion != 7) {
             System.out.println("Introducir operacion a realizar");
             System.out.println("1. Crear Producto");
-            System.out.println("2. Mostrar Producto");
-            System.out.println("3. Mostrar todos los productos");
-            System.out.println("4. Actualizar Producto");
-            System.out.println("5. Eliminar Producto");
-            System.out.println("6. salir");
+            System.out.println("2. Buscar Producto por id");
+            System.out.println("3. Buscar Producto por nombre");
+            System.out.println("4. Mostrar todos los productos");
+            System.out.println("5. Actualizar Producto");
+            System.out.println("6. Eliminar Producto");
+            System.out.println("7. salir");
             opcion = sc.nextInt();
             if (opcion == 1) {
                 System.out.println("ingresar el nombre del producto");
@@ -78,6 +78,24 @@ public class SistemaInventario {
 
             }
             if (opcion == 3) {
+                System.out.println("ingresar el nombre del producto");
+                sc.nextLine();
+                String nombre = sc.nextLine();
+                System.out.println("Cargando producto desde la base de datos...");
+                for (int i = 0; i < 3; i++) {
+                    try {
+                        Thread.sleep(500);
+                        System.out.print(".");
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+                System.out.println();
+                buscarProdutoPorNombre(nombre);
+
+            }
+            if (opcion == 4) {
                 System.out.println("cargando los productos desde la base de datos...");
                 for (int i = 0; i < 3; i++) {
                     try {
@@ -92,14 +110,14 @@ public class SistemaInventario {
                 mostrarProductos();
             }
 
-            if (opcion == 4) {
+            if (opcion == 5) {
                 System.out.println("ingresar el ID del producto");
                 Long id = sc.nextLong();
                 sc.nextLine();
                 System.out.println("ingresar el campo a actualizar y su nuevo valor separado por coma ej(nombre,soda,precio,12,stock,20) ");
                 String datos = sc.nextLine();
                 System.out.println("Actualizando producto en la base de datos...");
-                for (int i = 0; i <3 ; i++) {
+                for (int i = 0; i < 3; i++) {
                     try {
                         Thread.sleep(500);
                         System.out.print(".");
@@ -113,11 +131,11 @@ public class SistemaInventario {
                 actualizarProducto(id, datos);
             }
 
-            if (opcion == 5) {
+            if (opcion == 6) {
                 System.out.println("ingresar el ID del producto a Eliminar");
                 Long id = sc.nextLong();
                 System.out.println("Eliminando el producto en la base de datos...");
-                for (int i = 0; i <3 ; i++) {
+                for (int i = 0; i < 3; i++) {
                     try {
                         Thread.sleep(500);
                         System.out.print(".");
@@ -130,7 +148,7 @@ public class SistemaInventario {
                 eliminarProducto(id);
             }
 
-            if (opcion == 6) {
+            if (opcion == 7) {
                 System.out.println("⏳ Cerrando el sistema...");
                 for (int i = 0; i < 3; i++) {
                     try {
@@ -176,6 +194,11 @@ public class SistemaInventario {
         if (id != null) {
             ps.mostrarProducto(id);
         }
+    }
+
+    public static void buscarProdutoPorNombre(String nombre) {
+        ps.mostrarProductoPorNombre(nombre);
+
     }
 
     public static void mostrarProductos() {

@@ -24,7 +24,16 @@ public class ProductoServicio {
 
     public void mostrarProducto(Long id) {
         ProductoDTO productoBuscado = productoDAO.mostrarProducto(id);
-        System.out.println(productoBuscado.toString());
+        if (productoBuscado != null)
+            System.out.println(productoBuscado.toString());
+
+    }
+
+    public void mostrarProductoPorNombre(String nombre) {
+        ProductoDTO productoBuscado = productoDAO.mostrarProductoPorNombre(nombre);
+        if (productoBuscado != null)
+            System.out.println(productoBuscado.toString());
+
 
     }
 

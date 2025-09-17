@@ -25,16 +25,16 @@ public class ProductoDAO {
 
     public boolean agregarProducto(ProductoDTO productoDTO) {
 
-        if (productoDTO.getNombre().matches("\"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\\\\s\\\\.\\\\,\\\\(\\\\)\\\\&\\\\#\\\\@\\\\%\\\\!\\\\?]+$")){
+        if (productoDTO.getNombre().matches("\"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\\\\s\\\\.\\\\,\\\\(\\\\)\\\\&\\\\#\\\\@\\\\%\\\\!\\\\?]+$")) {
             System.out.println("caracte invalido");
             return false;
         }
         BigDecimal precio = productoDTO.getPrecio();
-        if (precio.doubleValue()<=0){
+        if (precio.doubleValue() <= 0) {
             System.out.println("precio invalido");
             return false;
         }
-        if (productoDTO.getStock()<=4){
+        if (productoDTO.getStock() <= 4) {
             System.out.println("stock invalido");
             return false;
         }
@@ -130,7 +130,7 @@ public class ProductoDAO {
 
 
     public boolean eliminarProducto(Long id) {
-        if (mostrarProducto(id)==null)return false;
+        if (mostrarProducto(id) == null) return false;
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM producto WHERE id=?")) {
             ps.setLong(1, id);
             int i = ps.executeUpdate();
@@ -139,6 +139,35 @@ public class ProductoDAO {
             System.err.println(e.getMessage());
             throw new RuntimeException("Error en la eliminacion del producto", e);
         }
+
+    }
+
+    public ProductoDTO mostrarProductoPorNombre(String nombre) {
+        if (nombre == null) throw new IllegalArgumentException("El nombre no puede ser nulo");
+        if (nombre.trim().isEmpty()) throw new IllegalArgumentException("El nombre no puede estar vacío");
+        if (!nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]+$"))
+            throw new IllegalArgumentException("El nombre contiene caracteres no válidos");
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM producto1 WHERE nombre=?")) {
+            ps.setString(1, nombre);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return ProductoDTO.builder()
+                            .id(rs.getLong("id"))
+                            .nombre(rs.getString("nombre"))
+                            .precio(rs.getBigDecimal("precio"))
+                            .stock(rs.getInt("stock"))
+                            .build();
+                } else {
+                    System.out.println("No se encontro el producto: " + nombre);
+                    return null;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("No se encontro el pruducto con el nombre: " + nombre, e);
+        }
+
 
     }
 

@@ -24,10 +24,17 @@ public class ProductoServicioTest {
     }
 
     @Test
-    public void consultarProducto() {
+    public void mostrarProductoPorId() {
         long id = 12;
         ProductoDAO dao = new ProductoDAO();
         assertNotNull(dao.mostrarProducto(id));
+
+    }
+    @Test
+    public void mostrarProductoPorNombre() {
+        String nombre = "pandex";
+        ProductoDAO dao = new ProductoDAO();
+        assertNotNull(dao.mostrarProductoPorNombre(nombre));
 
     }
 
