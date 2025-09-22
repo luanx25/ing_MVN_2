@@ -15,9 +15,9 @@ public class ProductoServicioTest {
     public void agregarProducto() {
         ProductoDAO dao = new ProductoDAO();
         ProductoDTO p = ProductoDTO.builder()
-                .nombre("cafe")
-                .precio(new BigDecimal("19.50"))
-                .stock(10)
+                .nombre("cafe americano")
+                .precio(new BigDecimal("25.90"))
+                .stock(30)
                 .build();
 //       assertDoesNotThrow(()->dao.agregarProducto(p));
         assertTrue(dao.agregarProducto(p));
@@ -25,16 +25,20 @@ public class ProductoServicioTest {
 
     @Test
     public void mostrarProductoPorId() {
-        long id = 12;
-        ProductoDAO dao = new ProductoDAO();
-        assertNotNull(dao.mostrarProducto(id));
+        long id = 1L;
+        ProductoServicio srv = new ProductoServicio();
+        assertNotNull(srv.mostrarProducto(id));
+//        ProductoDAO dao = new ProductoDAO();
+//        assertNotNull(dao.mostrarProducto(id));
 
     }
     @Test
     public void mostrarProductoPorNombre() {
-        String nombre = "pandex";
-        ProductoDAO dao = new ProductoDAO();
-        assertNotNull(dao.mostrarProductoPorNombre(nombre));
+        String nombre = "c";
+        ProductoServicio srv = new ProductoServicio();
+        assertNotNull(srv.mostrarProductoPorNombre(nombre));
+//        ProductoDAO dao = new ProductoDAO();
+//        assertNotNull(dao.mostrarProductoPorNombre(nombre));
 
     }
 
@@ -46,8 +50,9 @@ public class ProductoServicioTest {
     }
     @Test
     public void actualizarProducto() {
-        ProductoDAO dao = new ProductoDAO();
-        assertNotNull(dao.actualizarProducto(13l,ProductoDTO.builder().nombre("cafe").precio(new BigDecimal("19.00")).stock(12).build()));
+//        ProductoDAO dao = new ProductoDAO();
+        ProductoServicio ps = new ProductoServicio();
+        assertTrue(ps.ActualizarProducto (1L,"nombre,soda,precio,1,stock,45"));
 
 
     }

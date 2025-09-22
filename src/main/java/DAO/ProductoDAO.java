@@ -58,7 +58,7 @@ public class ProductoDAO {
     }
 
     public ProductoDTO mostrarProducto(Long id) {
-        try (PreparedStatement ps = con.prepareStatement("SELECT * from producto WHERE id =?")) {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * from producto1 WHERE id =?")) {
             ProductoDTO productoEncontrado;
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -70,6 +70,7 @@ public class ProductoDAO {
                             .stock(rs.getInt("stock"))
                             .build();
                 } else {
+                    System.out.println("No se encontro el producto con id: " + id);
                     return null;
                 }
 
@@ -107,12 +108,11 @@ public class ProductoDAO {
 
 
     public ProductoDTO actualizarProducto(Long id, ProductoDTO productoModificado) {
-
         ProductoDTO productoEncontrado = mostrarProducto(id);
         productoEncontrado.setNombre(productoModificado.getNombre());
         productoEncontrado.setPrecio(productoModificado.getPrecio());
         productoEncontrado.setStock(productoModificado.getStock());
-        try (PreparedStatement ps = con.prepareStatement("UPDATE producto SET nombre=?, precio=?, stock=? WHERE id=?")) {
+        try (PreparedStatement ps = con.prepareStatement("UPDATE producto1 SET nombre=?, precio=?, stock=? WHERE id=?")) {
             ps.setString(1, productoModificado.getNombre());
             ps.setBigDecimal(2, productoModificado.getPrecio());
             ps.setInt(3, productoModificado.getStock());
@@ -142,30 +142,29 @@ public class ProductoDAO {
 
     }
 
-    public ProductoDTO mostrarProductoPorNombre(String nombre) {
-        if (nombre == null) throw new IllegalArgumentException("El nombre no puede ser nulo");
-        if (nombre.trim().isEmpty()) throw new IllegalArgumentException("El nombre no puede estar vacío");
-        if (!nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]+$"))
-            throw new IllegalArgumentException("El nombre contiene caracteres no válidos");
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM producto1 WHERE nombre=?")) {
-            ps.setString(1, nombre);
+    public List<ProductoDTO> mostrarProductoPorNombre(String nombre) {
+        StringBuilder sb = new StringBuilder(nombre);
+//        sb.insert(0,"%");
+        sb.insert(sb.length(),"%");
+        System.out.println(sb);
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM producto1 WHERE nombre LIKE ?")) {
+            ps.setString(1, String.valueOf(sb));
+            List<ProductoDTO> productos = new ArrayList<>();
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return ProductoDTO.builder()
+                while (rs.next()) {
+                    productos.add(ProductoDTO.builder()
                             .id(rs.getLong("id"))
                             .nombre(rs.getString("nombre"))
                             .precio(rs.getBigDecimal("precio"))
                             .stock(rs.getInt("stock"))
-                            .build();
-                } else {
-                    System.out.println("No se encontro el producto: " + nombre);
-                    return null;
+                            .build());
                 }
+                return productos;
             }
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException("No se encontro el pruducto con el nombre: " + nombre, e);
+            throw new RuntimeException("No se encontraron pruductos con el nombre: " + nombre, e);
         }
 
 

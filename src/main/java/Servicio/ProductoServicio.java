@@ -1,7 +1,6 @@
 package Servicio;
 
 import DAO.ProductoDAO;
-import domain.Producto;
 import domain.ProductoDTO;
 
 import java.math.BigDecimal;
@@ -22,17 +21,32 @@ public class ProductoServicio {
 
     }
 
-    public void mostrarProducto(Long id) {
+    public ProductoDTO mostrarProducto(Long id) {
+        if (id <= 0) throw new IllegalArgumentException("El id no puede ser negativo o igual a 0");
         ProductoDTO productoBuscado = productoDAO.mostrarProducto(id);
-        if (productoBuscado != null)
+        if (productoBuscado != null) {
             System.out.println(productoBuscado.toString());
+            return productoBuscado;
+        } else {
+            System.out.println("no se encontro el producto");
+            return null;
 
+        }
     }
 
-    public void mostrarProductoPorNombre(String nombre) {
-        ProductoDTO productoBuscado = productoDAO.mostrarProductoPorNombre(nombre);
-        if (productoBuscado != null)
-            System.out.println(productoBuscado.toString());
+    public List<ProductoDTO> mostrarProductoPorNombre(String nombre) {
+        if (nombre == null) throw new IllegalArgumentException("El nombre no puede ser nulo");
+        if (nombre.trim().isEmpty()) throw new IllegalArgumentException("El nombre no puede estar vacío");
+        if (!nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]+$"))
+            throw new IllegalArgumentException("El nombre contiene caracteres no válidos");
+        List<ProductoDTO> productoBuscado = productoDAO.mostrarProductoPorNombre(nombre);
+        if (productoBuscado != null) {
+            productoBuscado.stream().forEach(System.out::println);
+            return productoBuscado;
+        } else {
+            System.out.println("no se encontro el producto");
+            return null;
+        }
 
 
     }
@@ -43,7 +57,7 @@ public class ProductoServicio {
 
     }
 
-    public void ActualizarProducto(Long id, String datosProducto) {
+    public boolean ActualizarProducto(Long id, String datosProducto) {
         ProductoDTO productoSeleccionado = productoDAO.mostrarProducto(id);
         String nombre = productoSeleccionado.getNombre();
         BigDecimal precio = productoSeleccionado.getPrecio();
@@ -75,6 +89,24 @@ public class ProductoServicio {
             String[] strings = datosProducto.split(",");
             stock = Integer.parseInt(strings[1]);
         }
+//
+//        if (nombre.matches("\"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\\\\s\\\\.\\\\,\\\\(\\\\)\\\\&\\\\#\\\\@\\\\%\\\\!\\\\?]+$")) {
+//            System.out.println("caracte invalido");
+//            return false;
+//        }
+        if (!nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]+$"))
+            throw new IllegalArgumentException("El nombre contiene caracteres no válidos");
+
+
+        if (precio.doubleValue() <= 0) {
+            System.out.println("precio invalido");
+            return false;
+        }
+        if (stock <= 4) {
+            System.out.println("stock invalido");
+            return false;
+        }
+
         ProductoDTO actualizado = productoDAO.actualizarProducto(id, ProductoDTO.builder()
                 .nombre(nombre)
                 .precio(precio)
@@ -83,9 +115,13 @@ public class ProductoServicio {
 
         if (actualizado != null) {
             System.out.println("Producto modificado con exito");
-            System.out.println(actualizado.toString());
+            System.out.println(actualizado);
+            return true;
 
-        } else System.out.println("Error al actualizar producto");
+        } else {
+            System.out.println("Error al actualizar producto");
+            return false;
+        }
 
     }
 
