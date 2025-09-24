@@ -131,7 +131,7 @@ public class ProductoDAO {
 
     public boolean eliminarProducto(Long id) {
         if (mostrarProducto(id) == null) return false;
-        try (PreparedStatement ps = con.prepareStatement("DELETE FROM producto WHERE id=?")) {
+        try (PreparedStatement ps = con.prepareStatement("DELETE FROM producto1 WHERE id=?")) {
             ps.setLong(1, id);
             int i = ps.executeUpdate();
             return i == 1;

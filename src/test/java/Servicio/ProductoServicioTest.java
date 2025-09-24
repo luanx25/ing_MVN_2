@@ -60,13 +60,11 @@ public class ProductoServicioTest {
 
 
 
-
-
     @Test
     public void eliminarProducto() {
-
-        ProductoDAO dao = new ProductoDAO();
-        assertTrue(dao.eliminarProducto(12L));
+//        ProductoDAO dao = new ProductoDAO();
+        ProductoServicio ps = new ProductoServicio();
+        assertTrue(ps.eliminarProducto(0L));
     }
 
 

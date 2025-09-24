@@ -124,12 +124,34 @@ public class SistemaInventario {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-
                 }
                 System.out.println();
-
                 actualizarProducto(id, datos);
             }
+//            if (opcion == 5) {
+//                System.out.println("ingresar el ID del producto");
+//                Long id = sc.nextLong();
+//                sc.nextLine();
+//                System.out.println("nombre:");
+//                String nombre = sc.next();
+//                System.out.println("precio:");
+//                BigDecimal precio = sc.nextBigDecimal();
+//                System.out.println("Stock:");
+//                Integer Stock = sc.nextInt();
+//
+//
+//                System.out.println("Actualizando producto en la base de datos...");
+//                for (int i = 0; i < 3; i++) {
+//                    try {
+//                        Thread.sleep(500);
+//                        System.out.print(".");
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//                System.out.println();
+//                actualizarProducto(id, datos);
+//            }
 
             if (opcion == 6) {
                 System.out.println("ingresar el ID del producto a Eliminar");

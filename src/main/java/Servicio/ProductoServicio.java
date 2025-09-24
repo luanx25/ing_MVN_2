@@ -125,11 +125,16 @@ public class ProductoServicio {
 
     }
 
-    public void eliminarProducto(Long id) {
-
+    public boolean eliminarProducto(Long id) {
+        if (id <= 0) throw new IllegalArgumentException("El id no puede ser negativo o igual a 0");
         boolean eliminarProducto = productoDAO.eliminarProducto(id);
-        if (eliminarProducto) System.out.println("producto eliminado con exito");
-        else System.out.println("Error al eliminar producto");
+        if (eliminarProducto) {
+            System.out.println("producto eliminado con exito");
+            return true;
+        } else {
+            System.out.println("Error al eliminar producto");
+        return false;
+        }
 
     }
 
